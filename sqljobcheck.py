@@ -5,12 +5,12 @@ import os
 
 basedir = os.path.dirname(__file__)
 # SQL Server connection details
-server = 'prodsql'  # Replace with your server name
+server = '<Server name>'  # Replace with your server name
 database = 'msdb'  # Replace with your database name
 trusted_connection = 'yes'
 
 # SQL Agent job owner
-job_owner = "LIGHTSTONE\\"+os.getlogin()
+job_owner = '<Domain name>\\'+os.getlogin()
 
 conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection={trusted_connection};'
 conn = pyodbc.connect(conn_str)
