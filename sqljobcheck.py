@@ -22,58 +22,6 @@ def save_config(config):
     with open(config_path, "w") as file:
         json.dump(config, file)
 
-#%%
-# Create a Tkinter window
-window = Tk()
-window.title("SQL Agent Jobs")
-
-# Load the config
-config = load_config()
-
-# Retrieve the default values from the config
-default_row_count = config.get("row_count", 1)
-default_server = config.get("server", "")
-default_job_owner = config.get("job_owner", os.getlogin())
-
-
-# Create a label for the job list
-job_label = Label(window, text="SQL Agent Jobs:")
-job_label.grid(row=0, column=0)
-
-# Create a label for the outcome list
-outcome_label = Label(window, text="Run Outcomes:")
-outcome_label.grid(row=0, column=1)
-
-# Create a label for the date list
-outcome_date = Label(window, text="Run Dates:")
-outcome_date.grid(row=0, column=2)
-
-# Create a Frame to contain the listboxes
-listbox_frame = Frame(window)
-listbox_frame.grid(row=1, column=0, columnspan=3, padx=10)
-
-# Create a scrollbar for the frame
-def scroll(x, y):
-    outcome_listbox.yview(x,y)
-    outcome_datebox.yview(x,y)
-    job_listbox.yview(x,y)
-
-scrollbar = Scrollbar(listbox_frame, orient="vertical")
-scrollbar.pack(side="right", fill=Y)
-scrollbar.config( command = scroll)
-
-# Create a listbox to display the job names
-job_listbox = Listbox(listbox_frame, width=30, yscrollcommand=scrollbar.set)
-job_listbox.pack(side="left", fill=Y, expand=True)
-
-# Create a listbox to display the run outcomes
-outcome_listbox = Listbox(listbox_frame, width=15, yscrollcommand=scrollbar.set)
-outcome_listbox.pack(side="left", fill=Y, expand=True)
-
-# Create a listbox to display the run dates
-outcome_datebox = Listbox(listbox_frame, width=25, yscrollcommand=scrollbar.set)
-outcome_datebox.pack(side="left", fill=Y, expand=True)
-
 # Function to handle connection errors
 def handle_connection_error():
     messagebox.showerror("Connection Error", "Error connecting to the database. Please check your server name and try again.")
@@ -148,34 +96,93 @@ def update_results():
     except pyodbc.Error:
         handle_connection_error()
 
-# Create a label and an entry field for row count
-row_count_label = Label(window, text="Number of Rows:")
-row_count_label.grid(row=0, column=3)
+# Create a scrollbar for the frame
+def scroll(x, y):
+    outcome_listbox.yview(x,y)
+    outcome_datebox.yview(x,y)
+    job_listbox.yview(x,y)
 
-entry_row_count = ttk.Entry(window, width=5)  # Assuming you use Entry field to capture the row count
-entry_row_count.grid(row=0, column=4)
+#%%
+# Create a Tkinter window
+window = Tk()
+window.title("SQL Agent Jobs")
+
+# Load the config
+config = load_config()
+
+# Retrieve the default values from the config
+default_row_count = config.get("row_count", 1)
+default_server = config.get("server", "")
+default_job_owner = config.get("job_owner", os.getlogin())
+
+
+# Create a label for the job list
+job_label = Label(window, text="SQL Agent Jobs:")
+job_label.grid(row=1, column=0)
+
+# Create a label for the outcome list
+outcome_label = Label(window, text="Run Outcomes:")
+outcome_label.grid(row=1, column=1)
+
+# Create a label for the date list
+outcome_date = Label(window, text="Run Dates:")
+outcome_date.grid(row=1, column=2)
+
+# Create a Frame to contain the listboxes
+listbox_frame = Frame(window)
+listbox_frame.grid(row=2, column=0, columnspan=3, padx=10)
+
+scrollbar = Scrollbar(listbox_frame, orient="vertical")
+scrollbar.pack(side="right", fill=Y)
+scrollbar.config( command = scroll)
+
+# Create a listbox to display the job names
+job_listbox = Listbox(listbox_frame, width=30, yscrollcommand=scrollbar.set)
+job_listbox.pack(side="left", fill=Y, expand=True)
+
+# Create a listbox to display the run outcomes
+outcome_listbox = Listbox(listbox_frame, width=15, yscrollcommand=scrollbar.set)
+outcome_listbox.pack(side="left", fill=Y, expand=True)
+
+# Create a listbox to display the run dates
+outcome_datebox = Listbox(listbox_frame, width=25, yscrollcommand=scrollbar.set)
+outcome_datebox.pack(side="left", fill=Y, expand=True)
+
+
+# Create a Frame to contain the inputs
+input_frame = Frame(window)
+input_frame.grid(row=0, column=0, columnspan=3, padx=10)
+
+# Create a label and an entry field for row count
+row_count_label = Label(input_frame, text="Number of Rows:")
+row_count_label.pack(side="left", fill=Y, expand=True)
+
+entry_row_count = ttk.Entry(input_frame, width=5)  # Assuming you use Entry field to capture the row count
+entry_row_count.pack(side="left", fill=Y, expand=True)
 entry_row_count.insert(0,default_row_count)
 
 # Create a label and an entry field for server name
-server_label = Label(window, text="Server:")
-server_label.grid(row=1, column=3)
+server_label = Label(input_frame, text="Server:")
+server_label.pack(side="left", fill=Y, expand=True)
 
-server_entry = ttk.Entry(window, width=20)
-server_entry.grid(row=1, column=4)
+server_entry = ttk.Entry(input_frame, width=20)
+server_entry.pack(side="left", fill=Y, expand=True)
 server_entry.insert(0, default_server)  # Set default server name
 
 # Create a label and an entry field for job owner
-job_owner_label = Label(window, text="Job Owner:")
-job_owner_label.grid(row=2, column=3)
+job_owner_label = Label(input_frame, text="Job Owner:")
+job_owner_label.pack(side="left", fill=Y, expand=True)
 
-job_owner_entry = ttk.Entry(window, width=20)
-job_owner_entry.grid(row=2, column=4)
+job_owner_entry = ttk.Entry(input_frame, width=20)
+job_owner_entry.pack(side="left", fill=Y, expand=True)
 job_owner_entry.insert(0, default_job_owner)  # Set default job owner
 
-
+# Create a Frame to contain the buttons
+button_frame = Frame(window)
+button_frame.grid(row=3, column=1, columnspan=1, padx=10)
 # Add a button to trigger the retrieval with the specified row count
-retrieve_button = Button(window, text="Refresh", command=update_results)
-retrieve_button.grid(row=2, column=5)
+retrieve_button = Button(button_frame, text="Refresh", command=update_results)
+retrieve_button.pack(side="left", fill=Y, expand=True)
 
 # Populate the job and outcome listboxes
 update_results()
