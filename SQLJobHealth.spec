@@ -8,7 +8,7 @@ a = Analysis(
     ['sqljobcheck.py'],
     pathex=[],
     binaries=[],
-    datas=[('icon.ico', '.'), ('config.json', '.')],
+    datas=[('icon.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

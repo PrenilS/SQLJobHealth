@@ -3,12 +3,26 @@ import pyodbc
 from tkinter import Tk, Label, Listbox, Scrollbar, Entry, Button, Frame, Y, messagebox, ttk
 import os
 import json
+from pathlib import Path
+
+# %% make appdata config folder
+appdatadir = f'{Path.home()}\\AppData\\Roaming\\SQLJobHealth'
+try:
+    os.mkdir(appdatadir)
+except:
+    pass
+config_path = os.path.join(appdatadir, "config.json")
+if not os.path.exists(config_path):
+    config = {}
+    with open(config_path, "w") as file:
+        json.dump(config, file)
 
 basedir = os.path.dirname(__file__)
 
+#%%
 # Load the config from the JSON file
 def load_config():
-    config_path = os.path.join(basedir, "config.json")
+    config_path = os.path.join(appdatadir, "config.json")
     if os.path.exists(config_path):
         with open(config_path, "r") as file:
             config = json.load(file)
@@ -18,7 +32,7 @@ def load_config():
 
 # Save the config to the JSON file
 def save_config(config):
-    config_path = os.path.join(basedir, "config.json")
+    config_path = os.path.join(appdatadir, "config.json")
     with open(config_path, "w") as file:
         json.dump(config, file)
 
@@ -95,6 +109,9 @@ def update_results():
                     outcome_datebox.insert("end", formatted_date)
     except pyodbc.Error:
         handle_connection_error()
+        entry_row_count.focus_force()
+        server_entry.focus_force()
+        job_owner_entry.focus_force()
 
 # Create a scrollbar for the frame
 def scroll(x, y):
