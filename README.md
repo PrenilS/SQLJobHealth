@@ -6,6 +6,7 @@ It will create a GUI which displays all MS SQL Server jobs owned by the user, th
 
 There is a input box on the top right which will change the number of most recent runs to display for each job. The default is 1.
 
+![Alt text](image.png)
 # Using
 ## Optional
 Create a virtual environment using the requirement.txt file in the repos root.
