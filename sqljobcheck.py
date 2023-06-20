@@ -207,13 +207,11 @@ update_results()
 # Configure listbox item colors
 try:
     job_listbox.itemconfig("end", fg="black")
-    outcome_listbox.itemconfig("end", fg="black")
 except:
     print("")
-
-# Remove the last empty item in job_listbox
-job_listbox.delete("end")
 
 # Start the Tkinter event loop
 window.iconbitmap(os.path.join(basedir, "icon.ico"))
 window.mainloop()
+
+# %%
